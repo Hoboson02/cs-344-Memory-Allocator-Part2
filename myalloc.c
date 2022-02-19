@@ -71,6 +71,16 @@ void *myalloc(size_t size) {
     while (cur != NULL) {
         // if this node is big enough and not in use:
         if (!cur->in_use && cur->size >= padded_size) {
+            //  # vvv splitting code ^^^
+
+            // if the space is big enough to split:
+            //     Split_Space(current, size) into current and new
+            // Split_Space(current_node, requested_size):
+            // If current_node big enough to split:
+            //     Add a new struct block with the remaining unused space
+            //     Wire it into the linked list
+
+            // # ^^^ splitting code ^^^
             // mark it in use
             cur->in_use = 1;
             printf("Found one!\n");
