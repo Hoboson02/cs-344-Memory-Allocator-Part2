@@ -18,13 +18,6 @@
 
 struct block *head = NULL;
 
-
-struct block {
-    struct block *next;
-    int size;     // Bytes
-    int in_use;   // Boolean
-};
-
 void print_data(void) {
     struct block *b = head;
 
