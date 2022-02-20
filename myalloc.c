@@ -80,9 +80,17 @@ void *myalloc(size_t size) {
     return NULL;
 }
 
+void myfree (void *p) {
+    struct block *b = p;
+    b->in_use = 0;
+}
+
 int main(void) {
+    void *p;
+
+    p = myalloc(512);
     print_data();
-    char *p = myalloc(60);
-    printf("%p\n", p);
+
+    myfree(p);
     print_data();
 }
