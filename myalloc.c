@@ -59,18 +59,12 @@ void *myalloc(size_t size) {
         // if this node is big enough and not in use:
         if (!cur->in_use && cur->size >= padded_size) {
             //  # vvv splitting code ^^^
-
-            // if the space is big enough to split:
-            //     Split_Space(current, size) into current and new
-            // Split_Space(current_node, requested_size):
-            // If current_node big enough to split:
-            //     Add a new struct block with the remaining unused space
-            //     Wire it into the linked list
+            split_space(cur, size);
 
             // # ^^^ splitting code ^^^
             // mark it in use
             cur->in_use = 1;
-            printf("Found one!\n");
+            // printf("Found one!\n");
 
             // return pointer to node data
             return PTR_OFFSET(cur, block_padded_size);
@@ -80,17 +74,27 @@ void *myalloc(size_t size) {
     return NULL;
 }
 
-void myfree (void *p) {
-    struct block *b = p;
+void split_space (struct block *s, size_t size) {
+    struct block *split_node = PTR_OFFSET(s, PADDED_SIZE(size) + PADDED_SIZE(sizeof(struct block))); // The data space requested by the user
+    split_node->in_use = 0;
+    split_node->size = s->size - (PADDED_SIZE(size) + (PADDED_SIZE(sizeof(struct block)))); // A new struct block (padded)
+    split_node->next = NULL;
+    s->next = split_node;
+    s->size = PADDED_SIZE(size);
+}
+
+void myfree (void *p) { 
+    struct block *b = p - (PADDED_SIZE(sizeof(struct block)));
     b->in_use = 0;
 }
 
 int main(void) {
     void *p;
 
-    p = myalloc(512);
-    print_data();
-
-    myfree(p);
-    print_data();
+    myalloc(10);     print_data();
+    p = myalloc(20); print_data();
+    myalloc(30);     print_data();
+    myfree(p);       print_data();
+    myalloc(40);     print_data();
+    myalloc(10);     print_data();
 }
