@@ -61,7 +61,7 @@ void *myalloc(size_t size) {
 }
 
 void split_space (struct block *s, size_t size) {
-    int required_space = padded_requested_space + padded_struct_block_size + 16;
+    int required_space = PADDED_SIZE(size) + PADDED_SIZE(sizeof(struct block)) + 16;
     
     if (s->size >= required_space) {
         struct block *split_node = PTR_OFFSET(s, PADDED_SIZE(size) + PADDED_SIZE(sizeof(struct block))); // The data space requested by the user
