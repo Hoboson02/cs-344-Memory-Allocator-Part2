@@ -1,18 +1,4 @@
-// * Understand 
-// * Plan
-
-// myalloc
-//     if this is the first run:
-//         do sbrk
-//         do first linked list node setup
-
-    // cur = front of the list 
-    // while cur is != NULL 
-    //     if this node is big enough and not in use:
-    //     mark it in use 
-    //     return pointer to node data
-
-    // return NULL
+// Ryan Earl
 
 #include "myalloc.h"
 
