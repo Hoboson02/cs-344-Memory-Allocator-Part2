@@ -31,14 +31,13 @@ void *myalloc(size_t size) {
 	if (head == NULL) { 
     	head = sbrk(1024);
     	head->next = NULL;
-    	head->size = 1024 - PADDED_SIZE(sizeof(struct block));
+    	head->size = 1024 - block_padded_size;
     	head->in_use = 0;
     }
 
     (void)size;
 
     int padded_size = PADDED_SIZE(size);
-    int block_padded_size = PADDED_SIZE(sizeof(struct block));
 
     struct block *cur = head;
     while (cur != NULL) {
@@ -61,12 +60,12 @@ void *myalloc(size_t size) {
 }
 
 void split_space (struct block *s, size_t size) {
-    int required_space = PADDED_SIZE(size) + PADDED_SIZE(sizeof(struct block)) + 16;
+    int required_space = PADDED_SIZE(size) + block_padded_size + 16;
     
     if (s->size >= required_space) {
-        struct block *split_node = PTR_OFFSET(s, PADDED_SIZE(size) + PADDED_SIZE(sizeof(struct block))); // The data space requested by the user
+        struct block *split_node = PTR_OFFSET(s, PADDED_SIZE(size) + block_padded_size); // The data space requested by the user
         split_node->in_use = 0;
-        split_node->size = s->size - (PADDED_SIZE(size) + (PADDED_SIZE(sizeof(struct block)))); // A new struct block (padded)
+        split_node->size = s->size - (PADDED_SIZE(size) + (block_padded_size)); // A new struct block (padded)
         split_node->next = NULL;
         s->next = split_node;
         s->size = PADDED_SIZE(size);
@@ -74,7 +73,7 @@ void split_space (struct block *s, size_t size) {
 }
 
 void myfree (void *p) { 
-    struct block *b = p - (PADDED_SIZE(sizeof(struct block)));
+    struct block *b = p - (block_padded_size);
     b->in_use = 0;
 }
 
