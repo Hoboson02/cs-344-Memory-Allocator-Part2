@@ -10,7 +10,7 @@
 
 #define PTR_OFFSET(p, offset) ((void*)((char *)(p) + (offset)))
 
-#define block_padded_size  PADDED_SIZE(sizeof(struct block))
+#define block_padded_size  ((int) PADDED_SIZE(sizeof(struct block)))
 
 struct block {
     struct block *next;
