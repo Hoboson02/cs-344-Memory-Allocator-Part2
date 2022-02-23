@@ -66,7 +66,7 @@ void split_space (struct block *s, size_t size) {
         struct block *split_node = PTR_OFFSET(s, PADDED_SIZE(size) + block_padded_size); // The data space requested by the user
         split_node->in_use = 0;
         split_node->size = s->size - (PADDED_SIZE(size) + (block_padded_size)); // A new struct block (padded)
-        split_node->next = NULL;
+        split_node->next = s->next;
         s->next = split_node;
         s->size = PADDED_SIZE(size);
     }
